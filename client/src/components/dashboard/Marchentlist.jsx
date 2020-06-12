@@ -8,7 +8,7 @@ import { getMarchentList } from "../../class/getProducts";
 
 import Alert from "./Alert";
 import $ from "jquery";
-import FakeLayout from "./FakeLayout";
+
 import { Navbar } from "../Navbar";
 
 const DashboardDiv = ({
@@ -118,6 +118,7 @@ const DashboardDiv = ({
 };
 
 export const Marchentlist = () => {
+  const [finalMarchent, setFinalMarchent] = useState([]);
   const [marchent, setMarchent] = useState([]);
   const [success, setSuccess] = useState({});
   const [error, setError] = useState({});
@@ -126,6 +127,7 @@ export const Marchentlist = () => {
     (async () => {
       const results = await getMarchentList();
       setMarchent(results);
+      setFinalMarchent(results);
     })();
   }, [refresh]);
 
@@ -144,6 +146,16 @@ export const Marchentlist = () => {
 
   const refreshChange = () => {
     setRefresh(Date.now());
+  };
+
+  const toggleAccount = (number) => {
+    const results = marchent.filter((d) => d.account_status === number);
+    setFinalMarchent(results);
+  };
+
+  const marchentSearch = (e) => {
+    const results = marchent.filter((d) => d.name.includes(e.target.value));
+    setFinalMarchent(results);
   };
 
   const removeMarchent = (id) => {
@@ -180,7 +192,7 @@ export const Marchentlist = () => {
       <Navbar />
 
       <main>
-        <FakeLayout />
+        <Layout />
         {Object.keys(error).length !== 0 && (
           <div className='alert alert-danger ' role='alert'>
             {JSON.stringify(error)}
@@ -212,10 +224,12 @@ export const Marchentlist = () => {
                       <a href='#'>Home</a>
                     </li>
                     <li className='breadcrumb-item'>
-                      <a href='/allproduct'>Product</a>
+                      <Link href='/allproduct'>Product</Link>
                     </li>
                     <li className='breadcrumb-item active' aria-current='page'>
-                      Data
+                      <Link to='#' onClick={refreshChange}>
+                        <i className='simple-icon-refresh'></i>Refresh
+                      </Link>
                     </li>
                   </ol>
                 </nav>
@@ -303,10 +317,20 @@ export const Marchentlist = () => {
                         Order By
                       </button>
                       <div className='dropdown-menu'>
-                        <a className='dropdown-item' href='#'>
+                        <a
+                          className='dropdown-item'
+                          href='#'
+                          onClick={() => {
+                            toggleAccount(1);
+                          }}>
                           Active Account
                         </a>
-                        <a className='dropdown-item' href='#'>
+                        <a
+                          className='dropdown-item'
+                          href='#'
+                          onClick={() => {
+                            toggleAccount(0);
+                          }}>
                           Pending Account
                         </a>
                       </div>
@@ -315,12 +339,13 @@ export const Marchentlist = () => {
                       <input
                         className='form-control datepicker'
                         placeholder='Search by Name'
+                        onChange={marchentSearch}
                       />
                     </div>
                   </div>
                   <div className='float-md-right'>
                     <span className='text-muted text-small'>
-                      Displaying {marchent.length} items{" "}
+                      Displaying {finalMarchent.length} items{" "}
                     </span>
                   </div>
                 </div>
@@ -329,7 +354,7 @@ export const Marchentlist = () => {
             </div>
           </div>
 
-          {marchent.map((m, index) => (
+          {finalMarchent.map((m, index) => (
             <DashboardDiv
               {...m}
               key={index}

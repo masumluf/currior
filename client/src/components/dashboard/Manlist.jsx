@@ -85,6 +85,7 @@ const DashboardDiv = ({
 };
 
 export const Manlist = () => {
+  const [finalMan, setFinalMan] = useState([]);
   const [man, setMan] = useState([]);
   const [success, setSuccess] = useState({});
   const [error, setError] = useState({});
@@ -93,6 +94,7 @@ export const Manlist = () => {
     (async () => {
       const results = await getManList();
       setMan(results);
+      setFinalMan(results);
     })();
   }, [refresh]);
 
@@ -118,6 +120,11 @@ export const Manlist = () => {
       drivingLicense,
       bikeRegNumber,
     });
+  };
+
+  const manSearch = (e) => {
+    const results = man.filter((d) => d.name.includes(e.target.value));
+    setFinalMan(results);
   };
 
   const refreshChange = () => {
@@ -171,7 +178,7 @@ export const Manlist = () => {
           <div className='row'>
             <div className='col-12'>
               <div className='mb-2'>
-                <h1>man List</h1>
+                <h1>Delivery Man List</h1>
                 <div className='top-right-button-container'>
                   <a
                     href='/adddeliveryman'
@@ -292,12 +299,13 @@ export const Manlist = () => {
                       <input
                         className='form-control datepicker'
                         placeholder='Search by Name'
+                        onChange={manSearch}
                       />
                     </div>
                   </div>
                   <div className='float-md-right'>
                     <span className='text-muted text-small'>
-                      Displaying {man.length} items{" "}
+                      Displaying {finalMan.length} items{" "}
                     </span>
                   </div>
                 </div>
@@ -306,7 +314,7 @@ export const Manlist = () => {
             </div>
           </div>
 
-          {man.map((m, index) => (
+          {finalMan.map((m, index) => (
             <DashboardDiv
               {...m}
               key={index}

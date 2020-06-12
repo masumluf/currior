@@ -82,7 +82,7 @@ const LayoutView = ({ match }) => {
             </li>
 
             <li>
-              <Link to='#' onClick={openNavM}>
+              <Link href='' onClick={openNavM}>
                 <i className='iconsminds-air-balloon-1'></i> Delivery Man
               </Link>
               <div id='mySidenavM' className='sidenav'>
