@@ -1,7 +1,6 @@
 node_modules/
 public/uploads/
-.env
-/server/.env
+
 /server/.gitignore
 client/.gitignore
 dev.js
