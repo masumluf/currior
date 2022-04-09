@@ -19,7 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.5.3",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "nodemailer": "^6.4.6",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
